@@ -18,22 +18,26 @@ class ItemDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final svc = Provider.of<SupabaseService>(context, listen: false);
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFF72585), Color(0xFF3A0CA3)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFF6A5ACD), // lavender
+            Color(0xFF48C9B0), // teal
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        child: SafeArea(
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
           child: FutureBuilder<Item?>(
             future: svc.fetchItemDetail(itemId),
             builder: (context, snap) {
               if (snap.connectionState != ConnectionState.done) {
                 return const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
+                  child: CircularProgressIndicator(color: Colors.deepPurple),
                 );
               }
               if (snap.hasError) {
@@ -49,7 +53,7 @@ class ItemDetailPage extends StatelessWidget {
                 return Center(
                   child: Text(
                     'Item not found 🤷',
-                    style: GoogleFonts.poppins(color: Colors.white),
+                    style: GoogleFonts.poppins(color: Colors.black87),
                   ),
                 );
               }
@@ -64,8 +68,8 @@ class ItemDetailPage extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () => Navigator.pop(context),
-                            child:
-                            const Icon(Icons.arrow_back_ios, color: Colors.white),
+                            child: const Icon(Icons.arrow_back_ios,
+                                color: Colors.white),
                           ),
                           const SizedBox(width: 8),
                           Text(
@@ -85,8 +89,10 @@ class ItemDetailPage extends StatelessWidget {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) =>
-                                FullScreenImagePage(itemId: item.id, imageUrl: item.imageUrl),
+                            builder: (_) => FullScreenImagePage(
+                              itemId: item.id,
+                              imageUrl: item.imageUrl,
+                            ),
                           ),
                         ),
                         child: Hero(
@@ -96,16 +102,16 @@ class ItemDetailPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: const [
                                 BoxShadow(
-                                  color: Colors.black38,
-                                  blurRadius: 12,
-                                  offset: Offset(0, 6),
+                                  color: Colors.black26,
+                                  blurRadius: 10,
+                                  offset: Offset(0, 5),
                                 ),
                               ],
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: Image.network(
                               item.imageUrl,
-                              height: 300,
+                              height: 280,
                               width: double.infinity,
                               fit: BoxFit.cover,
                             ),
@@ -128,18 +134,25 @@ class ItemDetailPage extends StatelessWidget {
                         '₱ ${item.price.toStringAsFixed(2)}',
                         style: GoogleFonts.poppins(
                           fontSize: 22,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           color: Colors.yellowAccent,
                         ),
                       ),
                       const SizedBox(height: 24),
 
-                      // Description
+                      // Description card
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.9),
                           borderRadius: BorderRadius.circular(16),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,23 +176,19 @@ class ItemDetailPage extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Info chips
-                      SizedBox(
-                        height: 40,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              InfoChip(icon: Icons.person, text: item.uploadedBy),
-                              const SizedBox(width: 8),
-                              InfoChip(icon: Icons.contact_mail, text: item.contactInfo),
-                              const SizedBox(width: 8),
-                              InfoChip(
-                                icon: Icons.calendar_today,
-                                text: '${item.createdAt.month}/${item.createdAt.day}/${item.createdAt.year}',
-                              ),
-                            ],
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          InfoChip(icon: Icons.person, text: item.uploadedBy),
+                          InfoChip(
+                              icon: Icons.contact_mail, text: item.contactInfo),
+                          InfoChip(
+                            icon: Icons.calendar_today,
+                            text:
+                            '${item.createdAt.month}/${item.createdAt.day}/${item.createdAt.year}',
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -192,16 +201,18 @@ class ItemDetailPage extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellowAccent,
+                        elevation: 2,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                       ),
                       onPressed: () async {
                         final email = snap.data!.contactInfo.trim();
-                        final subject =
-                        Uri.encodeComponent('Inquiry about "${item.title}"');
-                        final uri = Uri.parse('mailto:$email?subject=$subject');
+                        final subject = Uri.encodeComponent(
+                            'Inquiry about "${item.title}"');
+                        final uri =
+                        Uri.parse('mailto:$email?subject=$subject');
                         try {
                           await launchUrl(uri,
                               mode: LaunchMode.externalApplication);

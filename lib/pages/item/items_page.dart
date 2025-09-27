@@ -43,7 +43,10 @@ class ItemsPageState extends State<ItemsPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF3A0CA3), Color(0xFFF72585)],
+            colors: [
+              Color(0xFF6A5ACD), // lavender purple
+              Color(0xFF48C9B0), // teal green
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -51,16 +54,18 @@ class ItemsPageState extends State<ItemsPage> {
         child: SafeArea(
           child: Column(
             children: [
+              // Header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: [
                     Text(
-                      '🛍️ Thrift Store',
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
+                      '🛍️Tindahan ni Katrine, Rexie, at Emily',
+                      style: GoogleFonts.playfairDisplay(
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
+                        letterSpacing: 1,
                       ),
                     ),
                     const Spacer(),
@@ -105,6 +110,7 @@ class ItemsPageState extends State<ItemsPage> {
                             style: GoogleFonts.poppins(
                               color: Colors.white70,
                               fontSize: 18,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         );
@@ -159,8 +165,7 @@ class ItemsPageState extends State<ItemsPage> {
                                               shape: BoxShape.circle,
                                             ),
                                             child: IconButton(
-                                              icon: const Icon(
-                                                  Icons.delete, size: 20),
+                                              icon: const Icon(Icons.delete, size: 20),
                                               color: Colors.white,
                                               onPressed: () async {
                                                 await svc.deleteItem(item.id);
@@ -177,8 +182,7 @@ class ItemsPageState extends State<ItemsPage> {
                                 Padding(
                                   padding: const EdgeInsets.all(12),
                                   child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         item.title,
@@ -187,6 +191,7 @@ class ItemsPageState extends State<ItemsPage> {
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
+                                          color: const Color(0xFF5A189A),
                                         ),
                                       ),
                                       const SizedBox(height: 6),
@@ -194,7 +199,8 @@ class ItemsPageState extends State<ItemsPage> {
                                         'Php ${item.price.toStringAsFixed(2)}',
                                         style: GoogleFonts.poppins(
                                           fontSize: 14,
-                                          color: const Color(0xFF7209B7),
+                                          color: const Color(0xFF1ABC9C), // teal
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                       const SizedBox(height: 6),
@@ -213,13 +219,11 @@ class ItemsPageState extends State<ItemsPage> {
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
-                                            const Color(0xFFF72585),
-                                            padding:
-                                            const EdgeInsets.symmetric(
+                                            const Color(0xFF9B59B6), // lilac button
+                                            padding: const EdgeInsets.symmetric(
                                                 vertical: 10),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
                                           onPressed: () {
@@ -232,7 +236,9 @@ class ItemsPageState extends State<ItemsPage> {
                                           child: Text(
                                             'Details',
                                             style: GoogleFonts.poppins(
-                                                color: Colors.white),
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -253,12 +259,15 @@ class ItemsPageState extends State<ItemsPage> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: FloatingActionButton.extended(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF3A0CA3),
+                  backgroundColor: const Color(0xFF48C9B0), // teal
+                  foregroundColor: Colors.white,
                   icon: const Icon(Icons.add),
                   label: Text(
                     'Add New',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                   onPressed: () async {
                     await Navigator.pushNamed(context, '/add');
